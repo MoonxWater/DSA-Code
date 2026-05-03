@@ -1,3 +1,9 @@
+from engine import Engine
+
+run = Engine(([1, 1, 2, 3, 4, 5, 7], [2, 3, 4, 4, 5, 6, 10, 11, 12, 12],),
+            ([1, 1, 2, 3, 4, 5, 7], [1, 1, 2, 3, 4, 4, 5, 6, 10, 11, 12, 12],),
+            ([], [2, 3, 4, 4, 5, 6])).v8
+
 def union(arr1: list, arr2: list) -> list:
     i = j = 0
     res = set()
@@ -19,11 +25,8 @@ def union(arr1: list, arr2: list) -> list:
 
     return sorted(res)
 
-arr1 = [1, 1, 2, 3, 4, 5, 7]
-arr2 = [2, 3, 4, 4, 5, 6, 10, 11, 12, 12]
 
-res = union(arr1, arr2)
-print(res)
+run(union)
 
 
 def intersection(arr1: list, arr2: list) -> list:    
@@ -44,14 +47,5 @@ def intersection(arr1: list, arr2: list) -> list:
 
     return res
 
-arr1 = [1, 1, 2, 3, 4, 5, 7]
-arr2 = [1, 1, 2, 3, 4, 4, 5, 6, 10, 11, 12, 12]
 
-res = intersection(arr1, arr2)
-print(res)
-
-arr1 = []
-arr2 = [2, 3, 4, 4, 5, 6]
-
-res = intersection(arr2, arr1)
-print(res)
+run(intersection)

@@ -41,6 +41,7 @@ arr3 = [1, 1, 4, 5, 4, 3, 0, 2, 2, 3, 5]
 # print(appear_once2(arr2))
 # # print(appear_once2([-1, 2, 4, 3, 1, -1, 4, 3, 2, 1]))
 # print(appear_once2(arr3))
-from engine import run
+from engine import Engine
+run = Engine((arr,), (arr2,), (arr3,)).v8
 
-run(appear_once2, (arr,), (arr2,), (arr3,))
+run(appear_once2)

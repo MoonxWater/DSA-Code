@@ -3,27 +3,29 @@ from termcolor import colored
 import time
 
 class Engine:
-    def runner(self, func_name: Callable, *args) -> None:
+    def __init__(self, *args):
+        self.args = args
+
+    def v8(self, func_name: Callable) -> None:
         self.func_name = func_name
         avg = 0
 
-        for i in range(len(args)):
+        for i in range(len(self.args)):
             start = time.perf_counter()
-            res = self.call_func(*args[i])
+            res = self.func_name(*self.args[i])
             end = time.perf_counter() - start
             
-            print(colored(f"┌────────────────────────{i+1}────────────────────────", 'green'), end=colored("┐\n|", 'green'))
-            print(f"    Arg: {args[i]}                       ", end=colored("\n|", 'green'))
-            print(f"    Return Value: {res}                  ", end=colored("\n|", 'green'))
-            print(f"    Time: {end}s                         ", end=colored("\n└", 'green'))
-            print(colored("─────────────────────────────────────────────────┘", 'green'))
-            print()
+            self.wrapper(self.args[i], res, end, 'green')
+            
             avg += end
         
-        print(f"Avg Time: {avg / len(args)}s")
-
-    def call_func(self, *args):
-        return self.func_name(*args)
-        
-
-run = Engine().runner
+        print(f"Avg Time: {avg / len(self.args)}s")
+    
+    def wrapper(self, arg, res, end, colour):
+        print(colored("┌─────────────────────────────────────────────────", colour), end=colored("┐\n|", colour))
+        print(f"         Function: {self.func_name.__name__}                    ", end=colored("\n|", colour))
+        print(f"         Arg: {arg}                                    ", end=colored("\n|", colour))
+        print(f"         Return Value: {res}                           ", end=colored("\n|", colour))
+        print(f"         Time: {end}s                                  ", end=colored("\n└", colour))
+        print(colored("─────────────────────────────────────────────────┘", colour))
+        print()

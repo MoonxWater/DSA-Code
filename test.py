@@ -101,21 +101,7 @@
 # print(is_sorted(arr3)) # True
 # print(is_sorted(arr4)) # False
 
-# def remove_dup(arr: list) -> None:
-#     if len(arr) == len(set(arr)):
-#         return
-    
-#     offset = 0
 
-#     for i in range(1, len(arr)):
-#         if arr[i - offset] == arr[i - 1 - offset]:
-#             arr.pop(i - offset)
-#             offset += 1
-    
-
-# arr = [1, 1, 1, 2, 3, 4, 4, 5, 6, 7, 7, 9, 9]
-# remove_dup(arr)
-# print(arr)
 
 # def topKFrequent(nums: list[int], k: int) -> None:
 #     freq = {}
@@ -133,25 +119,6 @@
     
 
 # print(topKFrequent([1,2,2,3,3,3, 4], 2))
-
-# def closest_num(target: int, div: int) -> int:
-#     closest = div
-
-#     for num in range(div + 1, target):
-#         if num % div == 0:
-#             closest = num
-    
-#     return closest
-
-# print(closest_num(13, 6))
-
-
-# def close(target: int, div: int) -> int:
-#     closest = 0
-
-
-
-#     return 0
 
 
 # def sqrt(num: int) -> int:
