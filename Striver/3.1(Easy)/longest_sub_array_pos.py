@@ -1,9 +1,9 @@
 from engine import Engine
 
-test_cases = (([1, 2, 3, 1, 1, 1, 1, 4, 2, 3], 3), 
-              ([3, 1, 1, 1, 3], 3), 
-              ([1, 2, 1, 0, 1, 1, 0], 2))
-run = Engine(*test_cases).v8
+test_cases = [(([1, 2, 3, 1, 1, 1, 1, 4, 2, 3], 3), 3), 
+              (([3, 1, 1, 1, 3], 3), 3), 
+              (([1, 2, 1, 0, 1, 1, 0], 2), 4)]
+run = Engine(test_cases).v8
 
 '''
 iterate and store a running sum and store unique ones in a dict with value and index

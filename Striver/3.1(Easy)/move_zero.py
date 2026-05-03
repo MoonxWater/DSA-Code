@@ -1,6 +1,6 @@
 from engine import Engine
 
-run = Engine(([1, 4, 0, 2, 3, 5, 0, 0, 9, 0],)).v8
+run = Engine([([1, 4, 0, 2, 3, 5, 0, 0, 9, 0],)]).v8
 
 '''
 iterate over the array and check if the current element is equal to zero
