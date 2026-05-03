@@ -1,6 +1,6 @@
 from typing import Callable
 from termcolor import colored
-import time
+import time, copy
 
 class Engine:
     def __init__(self, *args):
@@ -11,8 +11,9 @@ class Engine:
         avg = 0
 
         for i in range(len(self.args)):
+            dup = copy.deepcopy(self.args[i])
             start = time.perf_counter()
-            res = self.func_name(*self.args[i])
+            res = self.func_name(*dup)
             end = time.perf_counter() - start
             
             self.wrapper(self.args[i], res, end, 'green')
