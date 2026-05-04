@@ -6,23 +6,6 @@ test_cases = [(([2, 2, 3, 3, 1, 2, 2],), 2),
 run = Engine(test_cases)
 
 '''
-hash all the elements to their cnt
-iterate over the hash to get the majority element
-'''
-
-def majority_element_hash(arr: list) -> int | None:
-    freq = {}
-    mid = len(arr) // 2
-
-    for num in arr:
-        freq[num] = 1 + freq.get(num, 0)
-        
-        if freq[num] > mid:
-            return num
-        
-    return None
-
-'''
 Moore's Voting Algorithm
 start with the first element and increment the cnt for this element
 if you again encounter the same element
@@ -60,6 +43,25 @@ def moore_s_voting_algo(arr: list) -> int | None:
             cnt += 1
 
     return key if cnt > len(arr) // 2 else None
+
+
+'''
+hash all the elements to their cnt
+return immediatly if the cnt exceeds n / 2
+'''
+
+def majority_element_hash(arr: list) -> int | None:
+    freq = {}
+    mid = len(arr) // 2
+
+    for num in arr:
+        freq[num] = 1 + freq.get(num, 0)
+        
+        if freq[num] > mid:
+            return num
+        
+    return None
+
 
 run.v8(majority_element_hash)
 run.v8(moore_s_voting_algo)
