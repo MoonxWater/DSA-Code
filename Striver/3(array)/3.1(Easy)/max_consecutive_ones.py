@@ -1,3 +1,9 @@
+from engine import Engine
+
+test_cases = [([[1, 1, 0, 1, 1, 1, 0, 1, 1]], {'ret':3}),
+              ([[0, 1, 1, 0, 1, 1, 1, 0, 1, 1]], {'ret':3})]
+run = Engine(test_cases)
+
 '''
 input = [1, 1, 0, 1, 1, 1, 0, 1, 1]
 output = 3
@@ -50,3 +56,8 @@ def max_consecutive_ones2(arr: list) -> int:
 
 arr = [0, 1, 1, 0, 1, 1, 1, 0, 1, 1]
 print(max_consecutive_ones2(arr))
+
+run.v8(max_consecutive_ones1)
+run.v8(max_consecutive_ones2)
+
+run.compare(max_consecutive_ones1, max_consecutive_ones2)

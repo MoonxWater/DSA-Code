@@ -1,6 +1,7 @@
 from engine import Engine
 
-test_cases = [(([10,1,5,6,7,1],), 6), (([10,8,7,5,2],), 0)]
+test_cases = [([[10,1,5,6,7,1]], {"ret":6}),
+               ([[10,8,7,5,2]], {"ret":0})]
 run = Engine(test_cases)
 
 '''
@@ -59,5 +60,3 @@ def max_profit_dp(prices: list[int]) -> int:
 
 run.v8(max_profit_dp)
 run.v8(max_profit_two_pointer)
-
-run.compare(max_profit_dp, max_profit_two_pointer)

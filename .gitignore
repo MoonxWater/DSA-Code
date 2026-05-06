@@ -2,3 +2,4 @@ __pycache__
 node*
 *.env
 *.local.env
+notes.py

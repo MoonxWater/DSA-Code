@@ -8,24 +8,64 @@ class Engine:
     """
     DSA testing engine.
 
+    Test case format
+    ────────────────
+    Each test case is a tuple of (args, expected_dict) where expected_dict
+    is optional and can have keys "ret" and/or "mod":
+
+        ([1, 2, 3], {"ret": 5})              # check return value only
+        ([1, 2, 3], {"mod": [1, 2, 3]})      # check mutated args only (in-place)
+        ([1, 2, 3], {"ret": 3, "mod": [...]}) # check both
+        ([1, 2, 3],)                          # no check, just run
+
     Basic usage
     ───────────
     test_cases = [
-        (([0, 1, 2, 0],), [0, 0, 1, 2]),   # in-place  → (args_tuple, expected)
-        (([1, 2, 3], 3),  5),               # return    → (args_tuple, expected)
-        (([0, 2, 1],),),                    # no check  → (args_tuple,)
+        ([[1,2,3], 3], {"ret": 5}),
+        ([[0,1,2,0]],  {"mod": [0,0,1,2]}),
     ]
-    run = Engine(test_cases).v8
+    e = Engine(test_cases)
+    e.v8(func)
+
+    With defaults (avoids repeating ret/mod in every case)
+    ──────────────────────────────────────────────────────
+    e = Engine(test_cases, default_ret=0)
+    e.set_defaults(ret=-1)
 
     Methods
     ───────
     .v8(func)                        run one function
     .compare(func1, func2, ...)      run multiple functions side-by-side
     .scale(func, generator, sizes)   measure time/space across input sizes
+    .set_cases(test_cases)           replace all test cases
+    .add_case(case)                  append a single test case
+    .set_defaults(ret=..., mod=...)  change default expected values
     """
 
-    def __init__(self, test_cases: list):
+    def __init__(
+        self,
+        test_cases: list,
+        default_ret=None,
+        default_mod=None,
+    ):
+        self.test_cases   = test_cases
+        self.default_ret  = default_ret
+        self.default_mod  = default_mod
+
+    # ── case management ──────────────────────────────────────────────────────
+
+    def set_cases(self, test_cases: list) -> None:
+        """Replace all test cases."""
         self.test_cases = test_cases
+
+    def add_case(self, case: tuple) -> None:
+        """Append a single test case."""
+        self.test_cases.append(case)
+
+    def set_defaults(self, ret=None, mod=None) -> None:
+        """Change default expected values used when a test case omits ret/mod."""
+        self.default_ret = ret
+        self.default_mod = mod
 
     # ── public API ───────────────────────────────────────────────────────────
 
@@ -68,7 +108,7 @@ class Engine:
         Parameters
         ──────────
         func       : function to profile
-        generator  : callable(n) -> args_tuple  (e.g. lambda n: ([...n items...], k))
+        generator  : callable(n) -> args_list  (e.g. lambda n: [[...n items...], k])
         sizes      : list of n values  (default: [10, 100, 500, 1000, 5000])
         repeat     : runs per size for stable timing
 
@@ -76,7 +116,7 @@ class Engine:
         ───────
         Engine([]).scale(
             longest_subarray,
-            lambda n: ([random.randint(-10, 10) for _ in range(n)], 5),
+            lambda n: [[random.randint(-10, 10) for _ in range(n)], 5],
         )
         """
         sizes = sizes or [10, 100, 500, 1000, 5000]
@@ -120,14 +160,20 @@ class Engine:
 
     def _run_all(self, func: Callable, repeat: int) -> list:
         results = []
-        for i, case in enumerate(self.test_cases):
-            args     = case[0]
-            expected = case[1] if len(case) == 2 else None
 
-            args_display = copy.deepcopy(args)
+        for i, case in enumerate(self.test_cases):
+            # unpack args and optional expected dict
+            args        = case[0]
+            expected    = case[1] if len(case) == 2 else {}
+            exp_ret     = expected.get("ret", self.default_ret)
+            exp_mod     = expected.get("mod", self.default_mod)
+
+            # snapshot original input before any mutation
+            original    = copy.deepcopy(args)
+
             times  = []
-            res    = None
-            output = copy.deepcopy(args)
+            ret    = None
+            output = copy.deepcopy(args)   # will hold post-call args
             error  = None
             peak   = 0
 
@@ -135,9 +181,9 @@ class Engine:
                 dup = copy.deepcopy(args)
                 try:
                     t0  = time.perf_counter()
-                    res = func(*dup)
+                    ret = func(*dup)
                     times.append(time.perf_counter() - t0)
-                    output = dup
+                    output = dup            # capture mutated copy
                 except Exception as e:
                     error = e
                     break
@@ -152,29 +198,47 @@ class Engine:
                 except Exception:
                     tracemalloc.stop()
 
-            avg_t  = sum(times) / len(times) if times else 0
-            actual = (output[0] if len(output) == 1 else output) if res is None else res
+            avg_t = sum(times) / len(times) if times else 0
 
+            # for display: unwrap single-element arg lists
+            # for mod comparison: always compare only the first (mutable) arg
+            mod_args         = output[0] if len(output) == 1 else output
+            mod_args_compare = output[0] if isinstance(output[0], (list, dict, set)) else mod_args
+
+            # determine pass/fail
             if error:
                 status = "error"
-            elif expected is None:
+            elif exp_ret is None and exp_mod is None:
                 status = "nocheck"
             else:
-                status = "pass" if actual == expected else "fail"
+                ret_ok = (exp_ret is None) or (ret == exp_ret)
+                mod_ok = (exp_mod is None) or (mod_args_compare == exp_mod)
+                status = "pass" if (ret_ok and mod_ok) else "fail"
 
-            diff = self._diff(actual, expected) if status == "fail" else None
+            # build diff string on failure
+            diff = None
+            if status == "fail":
+                parts = []
+                if exp_ret is not None and ret != exp_ret:
+                    parts.append(f"ret: {self._diff(ret, exp_ret)}")
+                if exp_mod is not None and mod_args_compare != exp_mod:
+                    parts.append(f"mod: {self._diff(mod_args_compare, exp_mod)}")
+                diff = "  |  ".join(parts)
 
             results.append({
                 "idx":      i + 1,
-                "args":     args_display,
-                "actual":   actual,
-                "expected": expected,
+                "input":    original,
+                "ret":      ret,
+                "mod":      mod_args,
+                "exp_ret":  exp_ret,
+                "exp_mod":  exp_mod,
                 "diff":     diff,
                 "time":     avg_t,
                 "peak_mem": peak,
                 "status":   status,
                 "error":    error,
             })
+
         return results
 
     # ── diff ─────────────────────────────────────────────────────────────────
@@ -227,10 +291,10 @@ class Engine:
 
     _STATUS_COLOR = {"pass": "green", "fail": "red", "error": "yellow", "nocheck": "cyan"}
     _STATUS_ICON  = {"pass": "✓",     "fail": "✗",   "error": "⚠",      "nocheck": "~"}
-    _W = 56
+    _W = 60
 
     def _line(self, label: str, value: object, colour: str, value_colour: Optional[str] = None) -> None:
-        label_str = f"  {label:<16}"
+        label_str = f"  {label:<18}"
         value_str = str(value)
         max_val   = self._W - len(label_str) - 2
         if len(value_str) > max_val:
@@ -252,10 +316,10 @@ class Engine:
     # ── v8 printer ───────────────────────────────────────────────────────────
 
     def _print_results(self, fname: str, results: list, repeat: int) -> None:
-        times = [r["time"] for r in results if r["time"] > 0]
-        mems  = [r["peak_mem"] for r in results if r["peak_mem"] > 0]
-        worst_t: Optional[dict] = max(results, key=lambda r: r["time"])   if len(results) > 1 else None
-        worst_m: Optional[dict] = max(results, key=lambda r: r["peak_mem"]) if len(results) > 1 else None
+        times    = [r["time"] for r in results if r["time"] > 0]
+        mems     = [r["peak_mem"] for r in results if r["peak_mem"] > 0]
+        worst_t  = max(results, key=lambda r: r["time"])    if len(results) > 1 else None
+        worst_m  = max(results, key=lambda r: r["peak_mem"]) if len(results) > 1 else None
 
         for r in results:
             colour = self._STATUS_COLOR[r["status"]]
@@ -267,19 +331,33 @@ class Engine:
                   " " * max(self._W - len(header), 1) + colored("│", colour))
             print(colored(f"├{'─'*self._W}┤", colour))
 
-            self._line("input",    r["args"],   colour)
-            self._line("output",   r["actual"], colour)
-            if r["expected"] is not None:
-                self._line("expected", r["expected"], colour)
-            if r["diff"]:
-                self._line("diff", r["diff"], colour, "red")
-            if r["error"]:
-                self._line("error", r["error"], colour, "red")
+            # always show original input
+            self._line("input",       r["input"],   colour)
 
-            slow_tag  = "  ← slowest" if worst_t and r is worst_t else ""
-            big_tag   = "  ← largest" if worst_m and r is worst_m else ""
-            slow_colour: Optional[str] = "yellow" if slow_tag else None
-            big_colour:  Optional[str] = "yellow" if big_tag  else None
+            # return value
+            self._line("returned",    r["ret"],     colour)
+
+            # modified args — only show if they differ from original input
+            orig_unwrapped = r["input"][0] if len(r["input"]) == 1 else r["input"]
+            if r["mod"] != orig_unwrapped:
+                self._line("after call",  r["mod"],     colour)
+
+            # expected values
+            if r["exp_ret"] is not None:
+                self._line("expected ret", r["exp_ret"], colour)
+            if r["exp_mod"] is not None:
+                self._line("expected mod", r["exp_mod"], colour)
+
+            if r["diff"]:
+                self._line("diff",        r["diff"],    colour, "red")
+            if r["error"]:
+                self._line("error",       r["error"],   colour, "red")
+
+            slow_tag    = "  ← slowest" if worst_t and r is worst_t else ""
+            big_tag     = "  ← largest" if worst_m and r is worst_m else ""
+            slow_colour = "yellow" if slow_tag else None
+            big_colour  = "yellow" if big_tag  else None
+
             self._line("time",
                        f"{self._fmt_time(r['time'])}  (avg ×{repeat}){slow_tag}",
                        colour, slow_colour)
@@ -316,38 +394,45 @@ class Engine:
         print()
 
         for i in range(len(self.test_cases)):
-            case     = self.test_cases[i]
-            args     = case[0]
-            rows     = [(fn, all_results[fn][i]) for fn in fnames]
+            case   = self.test_cases[i]
+            args   = case[0]
+            rows   = [(fn, all_results[fn][i]) for fn in fnames]
 
-            times_i  = [r["time"] for _, r in rows if r["time"] > 0]
-            mems_i   = [r["peak_mem"] for _, r in rows]
-            min_t    = min(times_i) if times_i else 0
-            min_m    = min(mems_i)  if mems_i  else 0
+            times_i = [r["time"] for _, r in rows if r["time"] > 0]
+            mems_i  = [r["peak_mem"] for _, r in rows]
+            min_t   = min(times_i) if times_i else 0
+            min_m   = min(mems_i)  if mems_i  else 0
 
             print(colored(f"  case #{i+1}  input: {str(args)[:60]}", "cyan"))
-            print(colored(f"  {'─'*56}", "cyan"))
+            print(colored(f"  {'─'*60}", "cyan"))
 
             for fname, r in rows:
-                colour    = self._STATUS_COLOR[r["status"]]
-                icon      = colored(self._STATUS_ICON[r["status"]], colour)
-                fast_tag  = colored(" ⚡", "green") if r["time"] == min_t and len(rows) > 1 else "  "
-                lean_tag  = colored(" 🪶", "green") if r["peak_mem"] == min_m and len(rows) > 1 else "  "
-                out_str   = str(r["actual"])
-                if len(out_str) > 18: out_str = out_str[:15] + "..."
-                diff_str  = colored(f"  ✗ {r['diff']}", "red")  if r["diff"]  else ""
-                err_str   = colored(f"  ⚠ {r['error']}", "yellow") if r["error"] else ""
+                colour   = self._STATUS_COLOR[r["status"]]
+                icon     = colored(self._STATUS_ICON[r["status"]], colour)
+                fast_tag = colored(" ⚡", "green") if r["time"] == min_t and len(rows) > 1 else "  "
+                lean_tag = colored(" 🪶", "green") if r["peak_mem"] == min_m and len(rows) > 1 else "  "
+
+                ret_str  = str(r["ret"])
+                if len(ret_str) > 12: ret_str = ret_str[:9] + "..."
+
+                orig_unwrapped = r["input"][0] if len(r["input"]) == 1 else r["input"]
+                mod_str  = ""
+                if r["mod"] != orig_unwrapped:
+                    m = str(r["mod"])
+                    mod_str = "  mod=" + (m[:12] + "..." if len(m) > 12 else m)
+
+                diff_str = colored(f"  ✗ {r['diff']}", "red")    if r["diff"]  else ""
+                err_str  = colored(f"  ⚠ {r['error']}", "yellow") if r["error"] else ""
 
                 print(
                     f"    {icon} {fname:<26}  "
-                    f"out={out_str:<20}  "
+                    f"ret={ret_str:<14}{mod_str:<18}  "
                     f"t={self._fmt_time(r['time'])}{fast_tag} "
                     f"mem={self._fmt_mem(r['peak_mem'])}{lean_tag}"
                     f"{diff_str}{err_str}"
                 )
             print()
 
-        # overall summary
         print(colored(f"  ┌─ OVERALL {'─'*42}", "cyan"))
         print()
         for fname in fnames:

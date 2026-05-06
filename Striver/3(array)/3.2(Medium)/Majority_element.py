@@ -1,8 +1,8 @@
 from engine import Engine
 
-test_cases = [(([2, 2, 3, 3, 1, 2, 2],), 2),
-              (([7, 7, 5, 7, 5, 1, 5, 7, 5, 5, 7, 7, 5, 5, 5, 5],), 5),
-              (([7, 7, 5, 7, 5, 1, 5, 7, 5, 5, 7, 7, 1, 1, 1, 1],), None)]
+test_cases = [([[2, 2, 3, 3, 1, 2, 2]], {"ret":2}),
+              ([[7, 7, 5, 7, 5, 1, 5, 7, 5, 5, 7, 7, 5, 5, 5, 5]], {"ret":5}),
+              ([[7, 7, 5, 7, 5, 1, 5, 7, 5, 5, 7, 7, 1, 1, 1, 1]], {"ret":None})]
 run = Engine(test_cases)
 
 '''
@@ -65,6 +65,4 @@ def majority_element_hash(arr: list) -> int | None:
 
 run.v8(majority_element_hash)
 run.v8(moore_s_voting_algo)
-
-run.compare(majority_element_hash, moore_s_voting_algo)
 

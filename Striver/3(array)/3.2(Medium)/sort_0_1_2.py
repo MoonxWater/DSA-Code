@@ -1,13 +1,13 @@
-# from engine import Engine
-from engine_legacy import Engine
+from engine import Engine
+# from engine_legacy import Engine
 
 test_cases = [
-    (([1, 2, 0, 1, 1, 2, 2, 1, 2, 1, 0, 0, 0, 2, 1, 0, 2, 0, 2, 0],), [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2]),
-    (([2, 1, 0, 1, 0, 2, 0],), [0, 0, 0, 1, 1, 2, 2]),
-    (([1, 0],), [0, 1])
+    ([[1, 2, 0, 1, 1, 2, 2, 1, 2, 1, 0, 0, 0, 2, 1, 0, 2, 0, 2, 0]], {"mod":[0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2]}),
+    ([[2, 1, 0, 1, 0, 2, 0]], {"mod":[0, 0, 0, 1, 1, 2, 2]}),
+    ([[1, 0]], {"mod":[0, 1]})
     ]
 
-run = Engine(test_cases).v8
+run = Engine(test_cases)
 
 '''
 Better:
@@ -64,8 +64,8 @@ def dutch_national_flag_algo(arr: list) -> None:
             arr[mid], arr[high] = arr[high], arr[mid]
             high -= 1
 
-# run(sort_0_1_2_better)
-run(dutch_national_flag_algo)
+# run.v8(sort_0_1_2_better)
+run.v8(dutch_national_flag_algo)
 
 
         
