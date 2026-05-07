@@ -5,9 +5,14 @@ test_cases = [([[1, 1, 0, 1, 1, 1, 0, 1, 1]], {'ret':3}),
 run = Engine(test_cases)
 
 '''
+About this problem:
 input = [1, 1, 0, 1, 1, 1, 0, 1, 1]
 output = 3
 '''
+
+
+#---Solution---------------------------------------------------------------------------------
+
 
 '''
 one variable to store max ones

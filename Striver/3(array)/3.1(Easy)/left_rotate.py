@@ -1,3 +1,19 @@
+from engine import Engine
+
+test_cases = []
+run = Engine(test_cases)
+
+'''
+
+'''
+
+
+#---Solution--------------------------------------------------------------------------------
+
+'''
+
+'''
+
 def left_rotate(arr: list, k: int):
     k = k % len(arr)
     
@@ -11,9 +27,9 @@ def left_rotate(arr: list, k: int):
                 print(i, j, k)
         i += k
 
-arr = [1, 2, 3, 4, 5, 6, 7, 8]
-left_rotate(arr, 5)
-print(arr)
+arr1 = [1, 2, 3, 4, 5, 6, 7, 8]
+left_rotate(arr1, 5)
+print(arr1)
 
 
 def left_rotate2(arr: list, k: int) -> None:
@@ -25,6 +41,8 @@ def left_rotate2(arr: list, k: int) -> None:
     arr[n - k:] = sorted(arr[n - k:])
     
 
-arr = [1, 2, 3, 4, 5, 6, 7, 8]
-left_rotate2(arr, 5)
-print(arr)
+arr2 = [1, 2, 3, 4, 5, 6, 7, 8]
+left_rotate2(arr2, 5)
+print(arr2)
+
+print(arr1==arr2)
