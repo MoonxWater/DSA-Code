@@ -52,14 +52,6 @@
 # print(arr)
 
 
-# def is_palindrome(text, i = 0):
-#     if i >= len(text) // 2: return True
-
-#     return (text[i] == text[len(text) - i - 1]) and is_palindrome(text, i + 1)
-
-# text = "abcddcba"
-# print(is_palindrome(text))
-
 # def mystery_sort(arr: list):
 #     i = 0
 

@@ -13,16 +13,16 @@ https://neetcode.io/problems/buy-and-sell-crypto/question
 
 
 # ---1----DP------------------------------------------------------------------------------------------
-"""
-iterate over the array
-assign the current element to buy_price if it is SMALLER
-in the next iteration, check profit
-compare with max profit
-return max profit
-"""
 
 
-def max_profit_two_pointer(prices: list[int]) -> int:
+"""
+1. assign the current element to buy_price if it is SMALLER
+2. check profit
+3. compare with max profit
+4. return max profit
+"""
+
+def max_profit_dp(prices: list[int]) -> int:
     max_profit = 0
     buy_price = prices[0]
 
@@ -34,7 +34,9 @@ def max_profit_two_pointer(prices: list[int]) -> int:
 
 
 
-# ----Two Pointer-----------------------------------------------------------------------------
+# ---2----Two Pointer-----------------------------------------------------------------------------
+
+
 """
 Set l = 0
 iterate over the array with r
@@ -44,8 +46,7 @@ at other points, compute profit and compare with max_profit
 return max_profit
 """
 
-
-def max_profit_dp(prices: list[int]) -> int:
+def max_profit_two_pointer(prices: list[int]) -> int:
     l = 0
     max_profit = 0
 
@@ -60,3 +61,5 @@ def max_profit_dp(prices: list[int]) -> int:
 
 run.v8(max_profit_dp)
 run.v8(max_profit_two_pointer)
+
+run.compare(max_profit_dp, max_profit_two_pointer)
