@@ -33,7 +33,7 @@ check is cur_sum is less than zero
     if true: reassign cur_sum to zero
     else: move on
 '''
-
+# Kadane's Algorithm
 def max_subarray_sum_one_pass(arr: list) -> int | float:
     max_sum = float('-inf')
     cur_sum = 0
@@ -69,7 +69,10 @@ def max_subarray_sum_print_subarray(arr: list) -> list:
 
 run.v8(max_subarray_sum_one_pass)
 
-test_cases = [(([-2, -3, 4, -1, -2, 1, 5, -3],),), (([5,4,-1,7,8],),), (([-2,1,-3,4,-1,2,1,-5,4],), ), (([3, -100, 4],), )]
+test_cases = [([[-2, -3, 4, -1, -2, 1, 5, -3]],),
+               ([[5,4,-1,7,8]],),
+               ([[-2,1,-3,4,-1,2,1,-5,4]], ), 
+              ([[3, -100, 4]], )]
 run = Engine(test_cases)
 run.v8(max_subarray_sum_print_subarray)
         

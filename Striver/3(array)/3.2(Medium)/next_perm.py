@@ -1,11 +1,48 @@
 from engine import Engine
 
-test_cases = [([[3, 1, 2]], {'red':[3, 2, 1]})]
+test_cases = [([[3, 1, 2]], {'red':[3, 2, 1]}),
+              ([[2, 1, 5, 4, 3, 0, 0]], {'ret':[2, 3, 0, 0, 1, 4, 5]})]
 run = Engine(test_cases)
 
-''''''
+'''
+About this Problem:
+return the next perm order wise.
+if the given array is last in perm order, return first perm
+'''
 
 #----Solution----------------------------------------------------------------------------------------------
+
+
+'''
+longest prefix match approach; ex: [2, 1, 5, 4, 3, 0, 0] 
+1. look for break point where slope dips ie in the example array, dip is between 1 and 5
+2. look from back the first element which is greater than element at breakpoint and swap them
+    [2, 3, 5, 4, 1, 0, 0]
+3. reverse the array from breakpoint + 1 to end
+    [2, 3, 0, 0, 1, 4, 5] <- This is the answer
+'''
+
+def next_perm_prefix(arr: list[int]) -> list[int]:
+    brk_pt_idx = -1
+    ret = arr.copy()
+    
+    for i in range(len(arr) - 1, 0, -1):
+        if arr[i] > arr[i - 1]:
+            brk_pt_idx = i - 1
+            break
+    if brk_pt_idx == -1:
+        ret.reverse()
+        return ret
+    
+    for i in range(len(arr) - 1, brk_pt_idx, -1):
+        if ret[i] > ret[brk_pt_idx]:
+            ret[i], ret[brk_pt_idx] = ret[brk_pt_idx], ret[i]
+            break
+    
+    ret[brk_pt_idx+1:] = ret[:brk_pt_idx:-1]
+
+    return ret
+
 
 
 '''
@@ -19,47 +56,10 @@ for example, instead of 123 we had 124, the difference would become
 
 '''
 
-def next_perm_obs(arr: list) -> list:
+def next_perm_obsrv(arr: list) -> list:
     res = []
 
     return res
 
-'''
-store a sorted ref array.
 
-'''
-import math
-
-def next_perm_slope_rotate(arr: list) -> list:
-    ref = sorted(arr)
-    sat = False
-    ret_flag = False
-
-    for i in range(math.factorial(len(arr)) - 1):
-        print(ref)
-        if ret_flag:
-            print("ref:", ref)
-            return ref
-
-        if sat:
-            ref[-3], ref[-2] = ref[-2], ref[-3]
-            sat = False
-        else:
-            ref[-2], ref[-1] = ref[-1], ref[-2] 
-            sat = True
-        
-        if ref == arr:
-            ret_flag = True
-        
-    ref.reverse
-    print("hello")
-    return ref
-
-print(next_perm_slope_rotate([3, 2, 1]))
-
-
-'''
-brute force, generate all perms
-look for the arr in the list
-return the next. if arr is last, return first
-'''
+run.v8(next_perm_prefix)

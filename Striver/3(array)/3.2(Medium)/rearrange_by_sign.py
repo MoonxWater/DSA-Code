@@ -3,7 +3,10 @@ from engine import Engine
 test_cases = [([[3, 1, -2, -5, 2, -4]], {"mod":[3, -2, 1, -5, 2, -4]})]
 run = Engine(test_cases)
 
-
+'''
+About the problem:
+The first element is guaranteed to be positive
+'''
 
 '''
 loop over the array and assign each element to the corresponding position in a new array
