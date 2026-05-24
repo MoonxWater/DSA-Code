@@ -7,8 +7,8 @@ run = Engine(test_cases)
 
 '''
 Moore's Voting Algorithm
-start with the first element and increment the cnt for this element
-if you again encounter the same element
+start with the first element as key and keep a cnt variable
+if you again encounter the same element, increment cnt
 if you encounter a different element, decrement the count
 
 if cnt after initialing reaches 0, that part of subarray is cancelled out

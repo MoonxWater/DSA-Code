@@ -23,7 +23,10 @@ return upper_bound
 '''
 
 def get_upper_bound(arr: list, target_bound: int) -> int:
-    upper_bound = 0
+    if not arr:
+        return -1
+    
+    upper_bound = -1
     low, high = 0, len(arr) - 1
 
     while low <= high:
