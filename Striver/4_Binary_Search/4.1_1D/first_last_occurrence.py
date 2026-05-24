@@ -77,4 +77,54 @@ def first_last_occurrence(arr: list, target: int) -> list[int]:
     return [first(), last()]
 
 
+def first_last_occurrence2(arr: list, target: int) -> list[int]:
+    def first() -> int:
+        if not arr:
+            return -1
+        
+        low, high = 0, len(arr) - 1
+        res = -1
+
+        while low <= high:
+            mid = (low + high) // 2
+
+            if arr[mid] == target:
+                res = mid
+                high = mid - 1
+            
+            elif arr[mid] > target:
+                high = mid - 1
+
+            else:
+                low = mid + 1
+
+        return res
+
+    def last() -> int:
+        if not arr:
+            return -1
+        
+        low, high = 0, len(arr) - 1
+        res = -1
+
+        while low <= high:
+            mid = (low + high) // 2
+
+            if arr[mid] == target:
+                res = mid
+                low = mid + 1
+            
+            elif arr[mid] < target:
+                low = mid + 1
+
+            else:
+                high = mid - 1
+
+        return res
+
+    return [first(), last()]
+
 run.v8(first_last_occurrence)
+run.v8(first_last_occurrence2)
+
+run.compare(first_last_occurrence, first_last_occurrence2)
