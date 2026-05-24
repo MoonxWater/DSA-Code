@@ -11,6 +11,26 @@ About this problem
 
 #---Solution-------------------------------------------------------------------
 
+def upper_bound_optimal(arr: list, target: int) -> int:
+    if not arr:
+        return -1
+    
+    low, high = 0, len(arr) - 1
+    upper_bound = -1
+
+    while low <= high:
+        mid = (low + high) // 2
+
+        if arr[mid] > target:
+            upper_bound = mid
+            high = mid - 1
+
+        else:
+            low = mid + 1
+
+    return upper_bound
+
+
 '''
 upper bound var with initial value set to idx 0
 two pointers low and high
