@@ -1,8 +1,8 @@
 from engine import Engine
 
-test_cases = [([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1], {'ret':0}),
-              ([[1, 2, 3, 4, 5, 6, 7, 8, 10, 11], 9], {'ret':7}),
-              ([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 3], {'ret':2})]
+test_cases = [([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1], {'ret':1}),
+              ([[1, 2, 3, 4, 5, 6, 7, 8, 10, 11], 9], {'ret':8}),
+              ([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 3], {'ret':3})]
 run = Engine(test_cases)
 
 '''
@@ -20,6 +20,9 @@ if true, update upper_bound to mid
     move low to mid + 1
 else move high to mid - 1
 return upper_bound
+'''
+'''
+this sol is wrong as it looks for the last occurrence and not the upper bound
 '''
 
 def get_upper_bound(arr: list, target_bound: int) -> int:
@@ -42,3 +45,6 @@ def get_upper_bound(arr: list, target_bound: int) -> int:
 
 
 run.v8(get_upper_bound)
+# run.v8(upper_bound_optimal)
+
+# run.compare(get_upper_bound, upper_bound_optimal)
