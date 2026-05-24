@@ -7,7 +7,7 @@
     "body": [
 	  "from engine import Engine",
 	  "",
-	  "test_cases = []",
+	  "test_cases = [([$2], {$3}), ([], {})]",
 	  "run = Engine(test_cases)",
 	  "",
 	  "",
@@ -16,7 +16,7 @@
 	  "",
 	  "#---Solution-----------------------------------------------------------------------------",
 	  "",
-	  ""
+	  "$0"
     ],
     "description": "Engine template"
   }
