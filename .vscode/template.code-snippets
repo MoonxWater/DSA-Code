@@ -7,7 +7,7 @@
     "body": [
 	  "from engine import Engine",
 	  "",
-	  "test_cases = [([$2], {$3}), \n([], {})]",
+	  "test_cases = [([$2], {$3}), \n\t\t\t  ([], {})]",
 	  "run = Engine(test_cases)",
 	  "",
 	  "",
