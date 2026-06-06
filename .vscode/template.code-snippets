@@ -18,9 +18,7 @@
 	  "",
 	  "'''\n$4\n'''",
 	  "def solution($5):",
-	  "\t$0",
-	  "",
-	  "run.v8(solution)"
+	  "\t$0"
     ],
     "description": "Engine template"
   }
