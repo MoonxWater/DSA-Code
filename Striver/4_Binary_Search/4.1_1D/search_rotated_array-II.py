@@ -21,7 +21,7 @@ calc mid of low and high
 check if el at mid is target, if true, return True
 check if arr[low] == arr[mid] == arr[high] (edge case) # this is the reason we cannot copy paste type 1 sol
     if true, trim search space by one from each side as this number will not be equal to target
-    (courtesy of prev if statement)
+    (courtesy of prev if statement) and skip the rest of the iteration
 rest is same
 check which half is sorted
 arr[low] <= arr[mid]
@@ -50,7 +50,7 @@ def search_sorted_rotated_array_with_duplicates(arr: list, target: int) -> bool:
         if arr[low] == arr[mid] == arr[high]:
             low, high = low + 1, high - 1
 
-        if arr[low] <= arr[mid]:
+        elif arr[low] <= arr[mid]:
             if arr[low] <=target < arr[mid]:
                 high = mid - 1
             
