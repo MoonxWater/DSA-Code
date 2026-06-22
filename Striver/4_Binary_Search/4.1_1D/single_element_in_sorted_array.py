@@ -39,13 +39,13 @@ def solution1(arr: list) -> int | None:
     while low <= high:
         mid = (low + high) // 2
 
-        if arr[mid] == arr[mid - 1]:
+        if mid > 0 and arr[mid] == arr[mid - 1]:
             if (mid + 1) % 2 == 0:
                 low = mid + 1
             else:
                 high = mid - 1
         
-        elif arr[mid] == arr[mid + 1]:
+        elif mid < len(arr) - 1 and arr[mid] == arr[mid + 1]:
             if (mid + 2) % 2 == 0:
                 low = mid + 1
             else:
@@ -57,6 +57,44 @@ def solution1(arr: list) -> int | None:
     return None
 
 
+'''
+a better approach would be to first check if el at 0 and len - 1 is the required one
+if not, we can trim the search space by one from both sides and save conditions
+to decide which side of the array we are on, we need to look how the elements arrange when the 
+required number is crossed and when it is not crossed.
+the pairs are arranged as (even, odd) pairs before the single element
+and when the element is crossed, the pairs become (odd, even), using this, we can successfully 
+eliminate half of the search space at each iteration.
+'''
 
+def solution2(arr: list) -> int | None:
+    if not arr:
+        return None
+    
+    if len(arr) == 1:
+        return arr[0]
+    
+    if arr[0] != arr[1]:
+        return arr[0]
+    
+    if arr[-1] != arr[-2]:
+        return arr[-1]
+    
+    low, high = 1, len(arr) - 2
+
+    while low <= high:
+        mid = (low + high) // 2
+
+        if arr[mid] != arr[mid - 1] and arr[mid] != arr[mid + 1]:
+            return arr[mid]
+        
+        if (mid % 2 == 1 and arr[mid] == arr[mid - 1]) or (mid % 2 == 0 and arr[mid] == arr[mid + 1]):
+            low = mid + 1
+
+        else: 
+            high = mid - 1
+
+    return None
 
 run.v8(solution1)
+run.v8(solution2)
