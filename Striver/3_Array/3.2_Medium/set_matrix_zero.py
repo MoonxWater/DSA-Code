@@ -25,7 +25,7 @@ About this problem:
 
 '''
 
-
+'''This solution currently does not contain the optimal code.'''
 #----Solution-----------------------------------------------------------------
 
 
@@ -57,6 +57,12 @@ def set_matrix_zero(matrix: list[list[int]]) -> None:
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             matrix[i][j] *= weights[j]
-    
+
+'''
+
+'''
+
+def optimal():
+    ...    
 
 run.v8(set_matrix_zero)

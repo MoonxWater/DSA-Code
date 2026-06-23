@@ -8,6 +8,7 @@ https://leetcode.com/problems/trapping-rain-water/
 
 
 '''This logic is flawed'''
+
 '''
 the constraints say that min len of height is one, so return 0
 immediately since there is 0 capacity for elevation with 2 or less
