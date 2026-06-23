@@ -111,23 +111,3 @@
     
 
 # print(topKFrequent([1,2,2,3,3,3, 4], 2))
-
-
-# def sqrt(num: int) -> int:
-#     cur_sum = 0
-
-#     for idx, i in enumerate(range(1, num, 2)):
-#         cur_sum += i
-
-#         if cur_sum == num:
-#             return idx + 1
-    
-#     return 0
-
-# print(sqrt(2025))
-
-
-
-
-
-

@@ -43,4 +43,19 @@ def solution(n: int) -> int:
 
     return ans
 
+
+def sqrt(num: int) -> int:
+    cur_sum = 0
+
+    for idx, i in enumerate(range(1, num, 2)):
+        cur_sum += i
+
+        if cur_sum == num:
+            return idx + 1
+    
+    return 0
+
+
 run.v8(solution)
+
+print(sqrt(2025))
