@@ -16,7 +16,6 @@ to finish all the piles within h hrs.
 
 '''
 make a cur_h to sum eating time
-res will store the best answer
 
 get max from the piles list
 set low to 1 and high to max
@@ -27,13 +26,22 @@ add the result to cur_h
 if at anypoint cur_h exceeds h, break from inner loop
 if break, koko too slow, increase speed: low to mid + 1
 if did not break, koko either too
-fast or perfect: high to mid - 1, res = mid
-return res + 1
+fast or perfect: high to mid - 1
+return low
+
+starting low from a not possible answer, low will end up
+at the first possible answer
+starting high from a possible answer, high will end up at 
+the first not possible answer.
+Using this, we can return low instead of having a third 
+var store the ans
 '''
 
 def solution(piles: list, h: int) -> int:
+    if not piles or not h or len(piles) > h:
+        return 0
+    
     low, high = 1, max(piles)
-    res = high
 
     while low <= high:
         mid = (low + high) // 2
@@ -47,13 +55,12 @@ def solution(piles: list, h: int) -> int:
             if cur_h > h:
                 break
         else:
-            res = mid
             high = mid - 1
             continue
         
         low = mid + 1
 
-    return res
+    return low
 
 
 run.v8(solution)
