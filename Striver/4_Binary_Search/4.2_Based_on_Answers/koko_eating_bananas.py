@@ -31,8 +31,6 @@ fast or perfect: high to mid - 1, res = mid
 return res + 1
 '''
 
-import math
-
 def solution(piles: list, h: int) -> int:
     low, high = 1, max(piles)
     res = high
@@ -42,7 +40,9 @@ def solution(piles: list, h: int) -> int:
         cur_h = 0
 
         for pile in piles:
-            cur_h += math.ceil(pile / mid)
+            # using the pure integer ceil formula instead of math.ceil
+            # ceilf(A/B) = (A + B - 1) // B
+            cur_h += (pile + mid - 1) // mid
 
             if cur_h > h:
                 break
