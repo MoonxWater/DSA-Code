@@ -49,7 +49,7 @@ def solution(bloom_days: list, req_bouquets: int, req_roses: int) -> int:
     if req_bouquets * req_roses > len(bloom_days):
         return -1
     
-    low, high = 1, max(bloom_days)
+    low, high = min(bloom_days), max(bloom_days)
 
     while low <= high:
         done_bouquets = 0
