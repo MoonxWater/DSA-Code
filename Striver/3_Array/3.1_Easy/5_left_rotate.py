@@ -32,6 +32,10 @@ left_rotate(arr1, 5)
 print(arr1)
 
 
+'''
+
+'''
+
 def left_rotate2(arr: list, k: int) -> None:
     n = len(arr)
     k = k % len(arr)

@@ -1,3 +1,16 @@
+from engine import Engine
+
+
+'''
+About this problem: 
+'''
+
+test_cases = [([[1, 1, 1, 2, 3, 4, 4, 5, 6, 7, 7, 9, 9]], {'ret': None}), 
+              ([[1, 2, 2, 3, 3, 3, 4]], {'ret': None})]
+run = Engine(test_cases)
+
+#---Solution-----------------------------------------------------------------------------
+
 '''
 checks if len of array is equal to len of set of array. return immediatly if true
 
@@ -22,6 +35,4 @@ def remove_dup(arr: list) -> None:
             offset += 1
     
 
-arr = [1, 1, 1, 2, 3, 4, 4, 5, 6, 7, 7, 9, 9]
-remove_dup(arr)
-print(arr)
+run.v8(remove_dup)
