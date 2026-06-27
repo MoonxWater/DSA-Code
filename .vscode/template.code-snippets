@@ -7,18 +7,17 @@
     "body": [
 	  "from engine import Engine",
 	  "",
-	  "test_cases = [([$2], {$3}), \n\t\t\t  ([], {})]",
-	  "run = Engine(test_cases)",
-	  "",
 	  "",
 	  "'''\nAbout this problem: $1\n'''",
 	  "",
+	  "test_cases = [([$2], {$3}), \n\t\t\t  ([$4], {$5})]",
+	  "run = Engine(test_cases)",
 	  "",
 	  "#---Solution-----------------------------------------------------------------------------",
 	  "",
-	  "'''\n$4\n'''",
+	  "'''\n$6\n'''",
 	  "",
-	  "def solution($5):",
+	  "def solution($7):",
 	  "\t...$0"
     ],
     "description": "Engine template"
