@@ -1,6 +1,8 @@
 from engine import Engine
 
-run = Engine([([1, 4, 0, 2, 3, 5, 0, 0, 9, 0],)]).v8
+
+test_cases = [([1, 4, 0, 2, 3, 5, 0, 0, 9, 0], {'ret': None})]
+run = Engine(test_cases).v8
 
 '''
 iterate over the array and check if the current element is equal to zero
@@ -29,10 +31,11 @@ run(move_zero1)
 
 def move_zero(arr: list) -> None:
     shift = 0
+
     for i in range(len(arr)):
-        print(arr)
         if arr[i] == 0:
             shift += 1
+            
         elif shift > 0:
             arr[i - shift] = arr[i]
             arr[i] = 0

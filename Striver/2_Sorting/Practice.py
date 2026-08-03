@@ -1,14 +1,10 @@
 from engine import Engine
 
 
-'''
-About this problem: 
-'''
-
 test_cases = [([[5, 5, 8, 4, 2, 1, 9, 8, 0, 7, 5]], {'ret': None})]
 run = Engine(test_cases)
 
-#---Solution-----------------------------------------------------------------------------
+# question 1: replicate bubble sort algo
 
 '''
 we compare the current element with the next element and see which one is greater
@@ -24,12 +20,9 @@ def bubble_sort(arr: list) -> None:
             if arr[j] > arr[j + 1]:
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
                 swapped = True
-
-        if swapped == False:
-            return
         
-arr = [5, 5, 8, 4, 2, 1, 9, 8, 0, 7, 5]
-bubble_sort(arr)
-print(arr)
+        if not swapped:
+            break
+
 
 run.v8(bubble_sort)

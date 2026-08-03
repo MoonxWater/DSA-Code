@@ -10,29 +10,10 @@ test_cases = [
 run = Engine(test_cases)
 
 '''
-Better:
-iteration over the array and store the count of all three numbers
-do a second iteration and overwrite the elements according to their cnts
+About the problem:
 '''
 
-def sort_0_1_2_better(arr: list) -> None:
-    cnt_0 = 0
-    cnt_1 = 0
-
-    for num in arr:
-        if num == 0:
-            cnt_0 += 1
-        
-        elif num == 1:
-            cnt_1 += 1
-        
-    for i in range(len(arr)):
-        if i < cnt_0:
-            arr[i] = 0
-        elif i < cnt_0 + cnt_1:
-            arr[i] = 1
-        else:
-            arr[i] = 2
+#---Solution-----------------------------------------------------------------------------
 
 '''
 This algorithm has 3 rules:
@@ -63,6 +44,32 @@ def dutch_national_flag_algo(arr: list) -> None:
         else:
             arr[mid], arr[high] = arr[high], arr[mid]
             high -= 1
+
+
+'''
+Better:
+iteration over the array and store the count of all three numbers
+do a second iteration and overwrite the elements according to their cnts
+'''
+
+def sort_0_1_2_better(arr: list) -> None:
+    cnt_0 = 0
+    cnt_1 = 0
+
+    for num in arr:
+        if num == 0:
+            cnt_0 += 1
+        
+        elif num == 1:
+            cnt_1 += 1
+        
+    for i in range(len(arr)):
+        if i < cnt_0:
+            arr[i] = 0
+        elif i < cnt_0 + cnt_1:
+            arr[i] = 1
+        else:
+            arr[i] = 2
 
 # run.v8(sort_0_1_2_better)
 run.v8(dutch_national_flag_algo)

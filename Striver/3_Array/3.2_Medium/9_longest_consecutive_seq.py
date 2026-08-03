@@ -37,8 +37,4 @@ def longest_consecutive_sequence_sort(arr: list[int]) -> int:
     return max(length, max_length)
 
 
-'''
-
-'''
-
 run.v8(longest_consecutive_sequence_sort)

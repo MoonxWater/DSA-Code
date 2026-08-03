@@ -6,41 +6,15 @@ About this problem:
 '''
 
 test_cases = [
-    ([[1, 1, 2, 3, 3, 4, 4]], {'ret': None}),
-    ([[6, 7, 5, 4, 1, 2, 3, 8, 8, 6, 5, 7, 3, 2, 1]], {'ret': None}),
-    ([[1, 1, 4, 5, 4, 3, 0, 2, 2, 3, 5]], {'ret': None})
+    ([[1, 1, 2, 3, 3, 4, 4]], {'ret': 2}),
+    ([[6, 7, 5, 4, 1, 2, 3, 8, 8, 6, 5, 7, 3, 2, 1]], {'ret': 4}),
+    ([[1, 1, 4, 5, 4, 3, 0, 2, 2, 3, 5]], {'ret': 0})
 ]
 run = Engine(test_cases)
 
 #---Solution-----------------------------------------------------------------------------
 
-'''
-
-'''
-
-def solution():
-    ...
-
-
-'''
-we can also add a pre check -> len(num) % 2 == 0: all are pairs
-loop through the array with step 2.
-at each step, check if num[i] != num[i + 1]: return num[i]
-'''
-
-def appear_once(arr: list) -> int:
-    if len(arr) % 2 == 0:
-        raise ValueError("No number appears once")
-    
-    for i in range(0, len(arr), 2):
-        if arr[i] != arr[i + 1]:
-            return arr[i]
-        
-    raise ValueError("No number appears once")
-
-
-
-'''the xor approch
+'''the xor approch (optimal)
 xor is difference checker ie if both inputs are same -> 0, unique -> some number
 xor of a number with 0 is the number itself.
 
@@ -54,7 +28,7 @@ def appear_once2(arr: list) -> int:
     '''Returns -1 if there is no number appearing once'''
 
     if len(arr) % 2 == 0:
-        raise ValueError("No number appears once")
+        return -1
     
     xor = 0
 
@@ -64,7 +38,25 @@ def appear_once2(arr: list) -> int:
     return xor
 
 
-run.v8(appear_once)
+'''
+Needs sorted array
+we can also add a pre check -> len(num) % 2 == 0: all are pairs
+loop through the array with step 2.
+at each step, check if num[i] != num[i + 1]: return num[i]
+'''
+
+def appear_once(arr: list) -> int:
+    if len(arr) % 2 == 0:
+        return -1
+    
+    for i in range(0, len(arr), 2):
+        if arr[i] != arr[i + 1]:
+            return arr[i]
+        
+    return -1
+
+
+# run.v8(appear_once)
 run.v8(appear_once2)
 
-run.compare(appear_once, appear_once2)
+# run.compare(appear_once, appear_once2)

@@ -20,24 +20,21 @@ About this problem:
 '''
 xor approach, works in all cases
 special property of xor -> 0 ^ x = x, x ^ x = 0
-if we keep on xoring the elements of the array and keep a separate xor variable to xor 
-all element using the index, the final xor of xor1 and xor2 would give us the missing 
+if we keep on xoring the elements of the array with each other and the index
+of each el, as well as the len of arr as one el is missing
+all element using the index, the final xor would give us the missing 
 number
 '''
 
 def missing_number_xor(arr: list) -> int:
-    xor1 = xor2 = 0
+    xor = len(arr) + 1
 
     for i in range(len(arr)):
-        xor1 ^= i + 1
-        xor2 ^= arr[i]
-    
-    xor1 ^= len(arr) + 1
+        xor ^= arr[i] ^ i + 1
 
-    return xor1 ^ xor2
-    
-print(missing_number_xor([1, 2, 4, 5, 6]))
-    
+    return xor
+
+
 '''
 works in all cases, i.e does not assume array is sorted
 sum from 1 to len + 1 -> sum1

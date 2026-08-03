@@ -1,8 +1,15 @@
 from engine import Engine
 
-run = Engine(([1, 1, 2, 3, 4, 5, 7], [2, 3, 4, 4, 5, 6, 10, 11, 12, 12],),
+
+test_cases = [([[1, 1, 2, 3, 4, 5, 7], [2, 3, 4, 4, 5, 6, 10, 11, 12, 12]], {}),
             ([1, 1, 2, 3, 4, 5, 7], [1, 1, 2, 3, 4, 4, 5, 6, 10, 11, 12, 12],),
-            ([], [2, 3, 4, 4, 5, 6])).v8
+            ([], [2, 3, 4, 4, 5, 6])]
+run = Engine(test_cases).v8
+
+
+'''
+
+'''
 
 def union(arr1: list, arr2: list) -> list:
     i = j = 0
@@ -28,6 +35,9 @@ def union(arr1: list, arr2: list) -> list:
 
 run(union)
 
+'''
+
+'''
 
 def intersection(arr1: list, arr2: list) -> list:    
     i = j = 0

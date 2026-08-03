@@ -34,7 +34,7 @@ keep a weight array equal to column of the matrix
 1. run a loop over each row and check if the element is zero
 2. if the current element is zero, make the corresponding
     weight zero
-3. after inner loop, make the entire row zero
+3. after inner loop, make the entire row zero if zero was found
 
 4.run another loop and multiply each element with the 
     corresponding weight
