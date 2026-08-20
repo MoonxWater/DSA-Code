@@ -29,7 +29,7 @@ public class LinkedListPrac {
     public static void print(Node head) {
         Node temp = head;
 
-        while (temp.next != null) {
+        while (temp != null) {
             System.out.print(temp.data + " ");
             temp = temp.next;
         }
@@ -49,13 +49,29 @@ public class LinkedListPrac {
         temp.next = null;
         return head;
     }
+
+    public static Node insertHead(Node head, int val) {
+        return new Node(val, head); 
+    }
+
+    public static void insertTail(Node head, int val) {
+        while (head.next != null) {
+            head = head.next;
+        }
+
+        head.next = new Node(val);
+    }
+
     public static void main(String[] args) {
         int[] x = {12, 4, 6, 8};
         Node head = convert_arr_to_LL(x);
 
-        Node temp = head;
         head = deleteTail(head);
-
+        
+        head = insertHead(head, 50);
+        insertTail(head, 99);
+        
+        Node temp = head;
         while (temp != null) {
             System.out.print(temp.data + " ");
             temp = temp.next;
